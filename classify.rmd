@@ -1,0 +1,63 @@
+---
+title: "Classification"
+author: "RocWay"
+output:
+  pdf_document:
+    keep_tex: yes
+    latex_engine: xelatex
+
+  html_document: default
+  word_document: default
+---
+
+# ML06
+## bagging and adaboost
+### bagging
+
+```{r}
+library(adabag)
+
+iris.bagging <- bagging(Species~., data=iris)
+
+spl<-c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
+a<-iris[spl,]$Species
+p<-predict(iris.bagging, iris[-spl,])
+
+p$confusion
+```
+
+### adaboost
+
+```{r}
+library(adabag)
+
+iris.boosting <- boosting(Species~., data=iris)
+
+spl<-c(sample(1:50, 25), sample(51:100, 25), sample(101:150, 25))
+a<-iris[spl,]$Species
+p<-predict(iris.boosting, iris[-spl,])
+
+p$confusion
+
+```
+
+From the result we can see that the adabag is more accurate than bagging.
+
+
+## Classify kyphosis with rpart
+
+```{r}
+library("rpart")
+library("rpart.plot")
+k<-rpart(Kyphosis~., data=kyphosis)
+rpart.plot(k)
+```
+
+## Classify with random forest
+
+```{r}
+library("randomForest")
+r<-randomForest(Kyphosis~., data=kyphosis, mtry=2, ntree=1000)
+plot(r)
+```
+
